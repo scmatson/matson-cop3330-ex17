@@ -1,4 +1,9 @@
 package base;
+
+import java.text.DecimalFormat;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 /*
  *  UCF COP3330 Summer 2021 Assignment 1 Solution
  *  Copyright 2021 Scott Matson
@@ -36,4 +41,85 @@ Challenges
 
  */
 public class App {
+
+    static  Scanner ui = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        DecimalFormat df = new DecimalFormat("##0.00");
+
+        System.out.print("How much do you weigh? ");
+        int weight = isInteger();
+        ui.nextLine();
+
+        System.out.print("What is your gender? Man or woman? ");
+        String gender = isGender();
+        double r;
+        if(gender.equals("man"))
+        {
+            r = 0.73;
+        }
+        else
+        {
+            r = 0.66;
+        }
+
+        System.out.print("How much alcohol have you consumed in ounces? ");
+        int alcohol = isInteger();
+
+        System.out.print("How many hours have passed since your last drink? ");
+        int time = isInteger();
+
+        //BAC = (A × 5.14 / W × r) − .015 × H
+        double BAC = ((alcohol * 5.14 / weight * r) - .015 * time);
+
+        if(BAC > 0.08)
+        {
+            System.out.println("Your BAC is " + df.format(BAC) + "\nIt is not legal for you to drive.");
+        }
+        else if(BAC < 0)
+        {
+            System.out.println("Please recalculate, negative value.");
+        }
+        else
+        {
+            System.out.println("Your BAC is " + df.format(BAC) + "\nIt is legal for you to drive.");
+        }
+    }
+
+    public static int isInteger()
+    {
+        while(true)
+        {
+            try
+            {
+                return ui.nextInt();
+            }
+            catch(InputMismatchException e)
+            {
+                ui.next();
+                System.out.print("That's not an integer. Try again: ");
+            }
+        }
+    }
+
+    public static String isGender()
+    {
+        while(true)
+        {
+            String a = ui.nextLine();
+            String b = a.toLowerCase();
+            if(b.equals("man"))
+            {
+                return b;
+            }
+            else if(b.equals("woman"))
+            {
+                return b;
+            }
+            else
+            {
+                System.out.print("Please say 'man' or 'woman': ");
+            }
+        }
+    }
 }
